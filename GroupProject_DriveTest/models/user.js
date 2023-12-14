@@ -12,6 +12,9 @@ const userSchema = new mongoose.Schema({
     username: { type: String, required: true, unique: true },
     password: { type: String, required: true },
     userType: { type: String, enum: ['Driver', 'Examiner', 'Admin'], default: 'Driver' },
+    testType: { type: String, emum: ['G2', 'G'], default: 'G2' },
+    result: { type: Boolean },
+    comment: { type: String, default: '' },
     car_details: {
         make: { type: String, default: 'default' },
         model: { type: String, default: 'default' },

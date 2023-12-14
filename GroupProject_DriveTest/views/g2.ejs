@@ -94,7 +94,7 @@
             <!-- Display Available Time Slots -->
             <h1><% if (bookedAppointment) { %>Your Booked Appointment<% } else { %>Book Appointment<% } %></h1>
             <% if (bookedAppointment) { %>
-            <p>Your booked slot is <%= bookedAppointment.date %> at <%= bookedAppointment.time %></p>
+            <p>Your <%= user.testType %>-type booked slot is <%= bookedAppointment.date %> at <%= bookedAppointment.time %></p>
             <% } else { %>
             <form action="/book" method="post">
                 <label for="appointmentDate">Select Date:</label>
@@ -109,6 +109,7 @@
                     <% }); %>
                     <% } %>
                 </select>
+                <input type="hidden" id="testType" name="testType" value="G2">
                 <button type="submit">Book Appointment</button>
             </form>
             <% } %>

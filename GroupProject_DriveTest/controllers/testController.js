@@ -56,8 +56,12 @@ const g = async (req, res) => {
             // Redirect to G2 page if license number is default
             res.redirect('/g2');
         } else {
+            const isBooked = user.appointment !== null ? true : false;
+            let bookedAppointment = false;
+
+            if (isBooked) bookedAppointment = await Appointment.findById(user.appointment);
             // Show G page with pre-filled data
-            res.render('g', { page: 'g_test', user: user });
+            res.render('g', { page: 'g_test', user: user, bookedAppointment, availableSlots: [] });
         }
     } catch (err) {
         res.status(500).send('Error: ' + err.message);
@@ -82,7 +86,7 @@ const updateG = async (req, res) => {
 
 const book = async (req, res) => {
     try {
-        const { date, time } = req.body;
+        const { date, time, testType } = req.body;
 
         const appointment = await Appointment.findOne({ date, time });
         console.log(appointment);
@@ -92,9 +96,9 @@ const book = async (req, res) => {
         console.log('after')
         // Update the currently logged-in user's appointment reference
         const userId = req.session.userId;
-        await User.findByIdAndUpdate(userId, { appointment: appointment._id });
+        await User.findByIdAndUpdate(userId, { testType: testType, appointment: appointment._id });
 
-        res.redirect('/g2');
+        res.redirect(`/${testType}`);
 
     } catch (error) {
         res.status(500).send('Server Error: ' + error.message);
