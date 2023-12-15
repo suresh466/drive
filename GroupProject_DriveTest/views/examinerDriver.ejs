@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('layouts/header'); -%>
+<body>
+    <%- include('layouts/navbar'); -%>
+
+    <!-- Hero Section -->
+    <%- include('layouts/hero', {page: 'Driver Details'}); -%>
+
+    <!-- Main Content -->
+    <div class="container mt-5">
+        <h2 class="mb-4">Driver Details</h2>
+
+        <!-- Driver Information -->
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">Driver's Name</th>
+                    <th scope="col">Test Type</th>
+                    <th scope="col">Car Make & Model</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><%= user.firstname + ' ' + user.lastname %></td>
+                    <td><%= user.testType %></td>
+                    <td><%= user.car_details.model + ' of ' + user.car_details.make %></td>
+                </tr>
+            </tbody>
+        </table>
+        <!-- Result and Comments Form -->
+        <form action="/examiner/driver/update" method="POST">
+            <input type="hidden" name="username" value="<%= user.username %>">
+            <div class="form-group">
+                <label>Result:</label>
+                <div>
+                    <input type="radio" id="pass" name="result" value="Pass" checked>
+                    <label for="pass">Pass</label>
+                </div>
+                <div>
+                    <input type="radio" id="fail" name="result" value="Fail">
+                    <label for="fail">Fail</label>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="comments">Comments:</label>
+                <textarea id="comments" name="comments" class="form-control" rows="4" required></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    </div>
+
+    <%- include('layouts/scripts'); -%>
+</body>
+</html>

@@ -11,7 +11,20 @@
                         <a class="nav-link" href="/dashboard">Dashboard</a>
                     </li>
                     <li class="nav-item">
+                        <a class="nav-link" href="/admin/result">Result</a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link" href="/admin/appointment">Appointment</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/logout">Logout</a>
+                    </li>
+                <% } else if (isExaminer) { %>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/dashboard">Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/examiner">Examination</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="/logout">Logout</a>

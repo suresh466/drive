@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+    <%- include('layouts/header'); -%>
+    <body>
+        <%- include('layouts/navbar'); -%>
+
+        <!-- Hero Section -->
+        <%- include('layouts/hero', {page: 'Examiner Dashboard'}); -%>
+
+        <!-- Main Content -->
+        <div class="container mt-5">
+            <h2 class="mb-4">Examiner Dashboard</h2>
+
+            <!-- Filter Dropdown -->
+            <div class="mb-4">
+                <label for="testTypeFilter">Filter by Test Type:</label>
+                <select id="testTypeFilter" class="form-control" style="width: auto;">
+                    <option value="All">All</option>
+                    <option value="G2">G2</option>
+                    <option value="G">G</option>
+                </select>
+            </div>
+
+            <!-- Appointments Table -->
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">Driver's Name</th>
+                        <th scope="col">Test Type</th>
+                        <th scope="col">Date & Time</th>
+                        <th scope="col">Car Make & Model</th>
+                        <th scope="col">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Dynamic rows will be inserted here based on server data -->
+                    <% appointments.forEach(appointment => { %>
+                    <tr>
+                        <td><%= appointment.driverName %></td>
+                        <td><%= appointment.testType %></td>
+                        <td><%= appointment.date %> at <%= appointment.time %></td>
+                        <td><%= appointment.carModel %> of <%= appointment.carMake %></td>
+                        <input type="hidden" name="username" class="username" value="<%= appointment.username %>">
+                        <td><button class="btn btn-primary details-btn " type="submit">Details</button></td>
+                    </tr>
+                    <% }); %>
+                </tbody>
+            </table>
+        </div>
+
+        <%- include('layouts/scripts'); -%>
+        <script>
+    // Get the current URL
+    let currentUrl = window.location.href;
+
+    // Get the current testType query parameter value from the URL
+    let urlParams = new URLSearchParams(window.location.search);
+    let selectedValue = urlParams.get('testType');
+
+    // Set the initial selection based on the query parameter
+    document.getElementById('testTypeFilter').value = selectedValue || 'All';
+
+    // Add an event listener to the testTypeFilter select element
+    document.getElementById('testTypeFilter').addEventListener('change', function () {
+        let selectedValue = this.value;
+
+        // Reload the page with the selected testType as a query parameter
+        let newUrl;
+
+        // Check if the current URL already has a testType query parameter
+        if (currentUrl.includes('?testType=')) {
+            // Replace the existing testType query parameter value
+            newUrl = currentUrl.replace(/(testType=)[^&]+/, '$1' + selectedValue);
+        } else {
+            // Add the testType query parameter to the current URL
+            newUrl = currentUrl + (currentUrl.includes('?') ? '&' : '?') + 'testType=' + selectedValue;
+        }
+
+        // Reload the page with the updated URL
+        window.location.href = newUrl;
+    });
+    // Add an event listener to the table to handle button clicks
+    const table = document.querySelector('.table');
+    table.addEventListener('click', function (event) {
+        if (event.target.classList.contains('details-btn')) {
+            // Get the username from the hidden input field in the same row
+            const row = event.target.closest('tr');
+            const username = row.querySelector('.username').value;
+
+            // Construct the URL with the username parameter
+            const url = `/examiner/driver?username=${username}`;
+
+            // Redirect to the URL
+            window.location.href = url;
+        }
+    });
+</script>
+    </body>
+</html>

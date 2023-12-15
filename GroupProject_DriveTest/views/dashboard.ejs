@@ -1,12 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
-        <%- include ('layouts/header'); -%>
+    <%- include ('layouts/header'); -%>
     <body>
         <%- include ('layouts/navbar'); -%>
         <%- include ('layouts/hero'); -%>
 
         <!-- main content -->
         <section class="container text-center py-5">
+            <div class="container mt-4">
+                <% if(typeof message !== 'undefined') { %>
+                <div class="alert alert-info">
+                    <p><%= message %></p>
+                </div>
+                <% } %>
+            </div>
             <div class="row">
                 <div class="col">
                     <h2 class="font-weight-bold text-dark">You can book G2/G drive test from this Kiosk</h2>
@@ -15,9 +22,6 @@
                 </div>
             </div>
         </section>
-        <% if(typeof message !== 'undefined') { %>
-        <p><%= message %></p>
-        <% } %>
 
         <%- include ('layouts/scripts'); -%>
     </body>

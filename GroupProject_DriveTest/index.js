@@ -5,12 +5,13 @@ const session = require('express-session');
 const User = require('./models/user');
 
 const {validateG2Middleware, validateGMiddleware, validateSignup} = require('./middleware/validateMiddlewares')
-const { checkLoggedIn, checkDriver, checkAdmin, addIsLoggedInToLocals, addIsAdminToLocals } = require('./middleware/authMiddleware');
+const { checkLoggedIn, checkDriver, checkAdmin, checkExaminer, addIsLoggedInToLocals, addIsAdminToLocals, addIsExaminerToLocals } = require('./middleware/authMiddleware');
 
 const generalController = require('./controllers/generalController');
 const userController = require('./controllers/userController');
 const testController = require('./controllers/testController');
 const appointmentController = require('./controllers/appointmentController');
+const examinerController = require('./controllers/examinerController');
 
 
 const app = express();
@@ -31,6 +32,7 @@ mongoose.connection.once('open', () => {
 
 app.use(addIsLoggedInToLocals);
 app.use(addIsAdminToLocals);
+app.use(addIsExaminerToLocals);
 
 app.listen(3000, ()=>{
     console.log('app listening on port 3000');
@@ -52,5 +54,10 @@ app.post('/update-g', validateGMiddleware, testController.updateG);
 app.get('/admin/appointment', checkAdmin, appointmentController.appointment);
 app.post('/admin/appointment/add', checkAdmin, appointmentController.add);
 app.get('/appointment/fetch', appointmentController.fetch);
+app.get('/admin/result', checkAdmin, appointmentController.listCandidates);
 
 app.post('/book', checkDriver, testController.book);
+
+app.get('/examiner', checkExaminer, examinerController.examinerDashboard);
+app.get('/examiner/driver', checkExaminer, examinerController.driverDetails);
+app.post('/examiner/driver/update', checkExaminer, examinerController.updateDriverDetails);

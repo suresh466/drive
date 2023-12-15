@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+    <%- include('layouts/header'); -%>
+    <body>
+        <%- include('layouts/navbar'); -%>
+
+        <!-- Main Content -->
+        <div class="container mt-5">
+            <h2 class="mb-4">Admin Dashboard - Driver Results</h2>
+
+            <!-- Filter Dropdown -->
+            <div class="mb-4">
+                <label for="resultFilter">Filter by Result:</label>
+                <select id="resultFilter" class="form-control" style="width: auto;">
+                    <option value="All">All</option>
+                    <option value="Pass">Pass</option>
+                    <option value="Fail">Fail</option>
+                </select>
+            </div>
+
+            <!-- Candidates Table -->
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">Driver's Name</th>
+                        <th scope="col">Test Type</th>
+                        <th scope="col">Result</th>
+                        <th scope="col">Comments</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% candidates.forEach(candidate => { %>
+                    <tr>
+                        <td><%= candidate.firstname + ' ' + candidate.lastname %></td>
+                        <td><%= candidate.testType %></td>
+                        <td><%= candidate.result ? 'Pass' : 'Fail' %></td>
+                        <td><%= candidate.comment %></td>
+                    </tr>
+                    <% }); %>
+                </tbody>
+            </table>
+        </div>
+
+        <%- include('layouts/scripts'); -%>
+<script>
+            // Get the current URL
+            let currentUrl = window.location.href;
+
+            // Get the current result query parameter value from the URL
+            let urlParams = new URLSearchParams(window.location.search);
+            let selectedValue = urlParams.get('result');
+
+            // Set the initial selection based on the query parameter
+            document.getElementById('resultFilter').value = selectedValue || 'All';
+
+            // Add an event listener to the resultFilter select element
+            document.getElementById('resultFilter').addEventListener('change', function () {
+                let selectedValue = this.value;
+
+                // Reload the page with the selected result as a query parameter
+                let newUrl;
+
+                // Check if the current URL already has a result query parameter
+                if (currentUrl.includes('?result=')) {
+                    // Replace the existing result query parameter value
+                    newUrl = currentUrl.replace(/(result=)[^&]+/, '$1' + selectedValue);
+                } else {
+                    // Add the result query parameter to the current URL
+                    newUrl = currentUrl + (currentUrl.includes('?') ? '&' : '?') + 'result=' + selectedValue;
+                }
+
+                // Reload the page with the updated URL
+                window.location.href = newUrl;
+            });
+        </script>
+    </body>
+</html>

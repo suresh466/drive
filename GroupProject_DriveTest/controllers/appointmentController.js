@@ -1,4 +1,5 @@
 const Appointment = require('../models/appointment');
+const User = require('../models/user');
 
 const appointment = (req, res) => {
     res.render('appointment', {page: 'appointment'});
@@ -38,4 +39,23 @@ const fetch = async (req, res) => {
     }
 };
 
-module.exports = { appointment, add, fetch }
+const listCandidates = async (req, res) => {
+    try {
+        const resultFilter = req.query.result || 'All';
+        let filter = {};
+
+        if (resultFilter !== 'All') {
+            filter.result = resultFilter === 'Pass' ? true : false;
+        }
+
+        const candidates = await User.find({ 
+            result: { $in: [true, false] }, 
+            ...filter 
+        }).populate('appointment');
+        res.render('adminResult', { candidates, resultFilter });
+    } catch (error) {
+        res.status(500).send('Server Error');
+    }
+};
+
+module.exports = { appointment, add, fetch, listCandidates }

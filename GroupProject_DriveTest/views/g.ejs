@@ -6,6 +6,17 @@
         <%- include ('layouts/hero'); -%>
 
         <!-- main content -->
+        <% if (user.result !== undefined && user.testType === 'G') { %>
+        <div class="card mt-3">
+            <div class="card-header">
+                Test Result
+            </div>
+            <div class="card-body">
+                <p><strong>Status:</strong> <%= user.result ? 'Pass' : 'Fail' %></p>
+                <p><strong>Comments:</strong> <%= user.comment || 'No comments' %></p>
+            </div>
+        </div>
+        <% } %>
         <% if (typeof user !== 'undefined' && user || typeof formData != 'undefined') { %>
         <!-- display user details and form to update car information -->
         <div class="card mt-3">
