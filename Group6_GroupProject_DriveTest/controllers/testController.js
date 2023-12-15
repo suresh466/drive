@@ -89,11 +89,9 @@ const book = async (req, res) => {
         const { date, time, testType } = req.body;
 
         const appointment = await Appointment.findOne({ date, time });
-        console.log(appointment);
 
         console.log('before')
         await Appointment.updateOne({ _id: appointment._id }, { isTimeSlotAvailable: false });
-        console.log('after')
         // Update the currently logged-in user's appointment reference
         const userId = req.session.userId;
         await User.findByIdAndUpdate(userId, { testType: testType, appointment: appointment._id });
